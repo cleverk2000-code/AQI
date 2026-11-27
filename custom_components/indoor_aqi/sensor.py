@@ -48,7 +48,6 @@ class SourceManager:
         if self.cancel_scan is not None:
             self.cancel_scan()
             self.cancel_scan = None
-            self.cancel_registry = None
         for cancel in self.subscriptions.values():
             cancel()
         self.subscriptions.clear()
@@ -75,6 +74,8 @@ class SourceManager:
 
     def source_value(self, source):
         entry = self.registry.async_get(source.source_id)
+        if source.registry_id is not None and (entry is None or entry.id != source.registry_id):
+            return None
         if entry and entry.disabled_by is not None:
             return None
         state = self.hass.states.get(source.source_id)
@@ -104,7 +105,7 @@ class SourceManager:
             found.add(key)
             source = self.sources.get(key)
             if source is None:
-                source = RoomAQI(self, key, state.entity_id, self.label_for(state, entry))
+                source = RoomAQI(self, key, state.entity_id, self.label_for(state, entry), entry.id if entry else None)
                 self.sources[key] = source
                 self.add([source])
             elif source.source_id != state.entity_id:
@@ -112,6 +113,8 @@ class SourceManager:
                 if old_cancel:
                     old_cancel()
                 source.source_id = state.entity_id
+            if entry and source.registry_id is None:
+                source.registry_id = entry.id
             if key not in self.subscriptions:
                 self.subscriptions[key] = async_track_state_change_event(
                     self.hass, [state.entity_id], self.source_changed
@@ -177,9 +180,10 @@ class BaseAQI(SensorEntity):
 
 
 class RoomAQI(BaseAQI):
-    def __init__(self, manager, key, source_id, name):
+    def __init__(self, manager, key, source_id, name, registry_id):
         self.manager = manager
         self.source_id = source_id
+        self.registry_id = registry_id
         self._attr_unique_id = f"source_{key}"
         self._attr_name = name
         self.refresh()
