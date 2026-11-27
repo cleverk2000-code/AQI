@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Indoor AQI",
+        "description": "PM2.5 센서를 자동 검색하여 실시간 환산 AQI 센서를 생성합니다. 로그인 정보나 YAML은 필요 없습니다."
+      }
+    },
+    "abort": {
+      "already_configured": "이미 설치되어 있습니다."
+    }
+  }
+}

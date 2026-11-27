@@ -1,0 +1,15 @@
+{
+  "domain": "indoor_aqi",
+  "name": "Indoor AQI",
+  "version": "1.0.0",
+  "config_flow": true,
+  "documentation": "https://github.com/cleverk2000-code/AQI",
+  "issue_tracker": "https://github.com/cleverk2000-code/AQI/issues",
+  "codeowners": [
+    "@cleverk2000-code"
+  ],
+  "integration_type": "service",
+  "iot_class": "calculated",
+  "single_config_entry": true,
+  "requirements": []
+}

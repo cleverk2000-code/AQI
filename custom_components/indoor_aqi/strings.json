@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Indoor AQI",
+        "description": "Automatically detect PM2.5 sensors and create local instantaneous AQI sensors. No credentials or YAML required."
+      }
+    },
+    "abort": {
+      "already_configured": "Already configured."
+    }
+  }
+}
